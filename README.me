@@ -1,0 +1,66 @@
+Título del proyecto:
+Plugin out
+
+Descripción general:
+Plugin out es un dispositivo lot intermediario entre la corriente y un dispositivo electronico o electrodomestico como un ventilador, un refrigerador, una pc, servidores, sistemas de riego, cualquier dispositive que se pueda apagar y encender sin importar su funcionamiento. Al interactuar con este dispositivo podemos rescatar parametros y ajustar su funcionamiento segun el resultado esperado, por ejemplo encender el sistema de riego solo cuando lo humedad sea menos a 10% etc.
+
+
+Materiales (hardware):
+-Placa de desarrollo Esp32 S3 Wroom Ia Devkitc-1 N16r8 Wifi
+-Sensor de temperatura y humedad DHT11
+-Microfono inmp441 modulo i2s Esp32
+-Led rojo para simular el dispositivo conectado
+-Resistencia para el led de 220ohm
+-Cable tipo c a usb
+-Cables macho-macho y macho-hembra
+
+## 🧠 Software
+-Esp-idf entorno terminal
+-Vscode entorno de desarrollo
+-Librerias como cmath, freertos, esp_log, esp_system, esp_spiffs, esp_wifi, nvs_flash, esp_event, esp_http_client, esp_https_server, i2s_std, tensorflow etc.
+-Repositorio de espressif_esp-tflite-micro
+
+
+## 🤖 Instrucciones de uso
+-Abrir como administrador la termianl de esp-idf y escribir los siguientes comandos: idf.py create-project nombre_del_proyecto, cd ruta/del/proyecto/creado, idf.py build, idf.py flash, idf.py monitor.
+-Para esto debemos tener previamente el codigo ya hecho en el proyecto de esp-idf en vscode.
+-En modo monitor nos conectamos a la red con el nombre PluginOut en nuestro telefono y en el navegador escribimos 192.168.1.4
+-Luego ponemos el nombre del dispositivo y nos conectamos a internet.
+-Nos volvemos a conectar a nuestro internet y recargamos la pagina.
+
+
+## 🚀 Funcionalidad
+El dispositivo se conecta a una api par mandarle datos como el nombre, humedad y temperatura y espera que la api le mande comandos com encender o apagar para controlar el dispositivo al cual esta conectado.
+
+
+
+## 📁 Estructura del Proyecto
+
+ /pluginout
+├── main/
+├── build/
+├── managmed_components/
+├── spiffs/
+├── dependencies.lock
+├── patitions.csv
+├── README.me
+├── sdkconfg
+├── sdkconfig.old
+└── CMakeList.txt
+
+
+## 🌐 API
+
+- POST /api/creportar: Envía datos de el ESP32 a la api.
+- GET /api/reportar: Envia al ESP32 el estado del dispoditivo por ejemplo temperatura 1 y humedad 2.
+
+- POST /api/comando: Recompila el ultimo comando capturado en el frontend.
+- GET /api/comando: Envia el ultimo comando al ESP32 por ejemplo encender o apagar.
+
+- GET /api/getnombre: Obtiene y proporciona el nombre proporcionado al esp32 al conectarse a internet 
+
+- POST /api/comando-customizado: Crea y guarda un nuevo comando en la base de datos por ejemplo encender x minutos
+- GET /api/comando-customizado: Obtiene un comando personalizado para ejecutarlo o mandarlo al esp32.
+
+- GET /api/docs: Muestra la documentacion con swagger
+

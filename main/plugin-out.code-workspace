@@ -1,0 +1,11 @@
+{
+	"folders": [
+		{
+			"path": "../../plugin-out"
+		},
+		{
+			"path": ".."
+		}
+	],
+	"settings": {}
+}

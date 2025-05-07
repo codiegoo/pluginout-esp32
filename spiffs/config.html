@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PlugIn-Out • Configuración WiFi</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: #f4f6f8;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      background: white;
+      padding: 2rem;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      max-width: 400px;
+      width: 100%;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+
+    select, input {
+      width: 100%;
+      padding: 0.7rem;
+      margin-bottom: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+
+    button {
+      width: 100%;
+      padding: 0.75rem;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Configurar PlugIn-Out</h1>
+    <form id="wifiForm">
+      <label for="nombre">Nombre del dispositivo</label>
+      <input type="text" id="nombre" placeholder="Ej. sensorSala" required />
+
+      <label for="ssid">Red WiFi</label>
+      <select id="ssid" required>
+        <option value="">Cargando redes...</option>
+      </select>
+
+      <label for="pass">Contraseña</label>
+      <input type="password" id="pass" placeholder="Contraseña de WiFi"/>
+
+      <button type="submit">Conectar</button>
+    </form>
+  </div>
+
+  <script>
+    // Cargar redes al abrir - Usando ruta relativa
+    fetch("/redes")
+      .then(res => res.json())
+      .then(data => {
+        const select = document.getElementById("ssid");
+        select.innerHTML = '<option value="">Selecciona tu red</option>';
+        data.forEach(ssid => {
+          const option = document.createElement("option");
+          option.value = ssid;
+          option.textContent = ssid;
+          select.appendChild(option);
+        });
+      })
+      .catch(err => {
+        alert("Error cargando redes WiFi.");
+        console.error(err);
+      });
+  
+    // Enviar datos al ESP32 - Usando ruta relativa
+    document.getElementById("wifiForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const nombre = document.getElementById("nombre").value;
+      const ssid = document.getElementById("ssid").value;
+      const pass = document.getElementById("pass").value;
+  
+      fetch(`/guardar?ssid=${encodeURIComponent(ssid)}&pass=${encodeURIComponent(pass)}&nombre=${encodeURIComponent(nombre)}`)
+        .then(res => res.text())
+        .then(msg => {
+          alert("Dispositivo configurado. Conectando...");
+          window.location.href = "https://plugin-out.vercel.app/";
+        })
+        .catch(err => {
+          alert("Error al conectar con el dispositivo.");
+          console.error(err);
+        });
+    });
+  </script>
+</body>
+</html>
